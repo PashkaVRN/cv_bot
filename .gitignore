@@ -1,0 +1,6 @@
+.Python
+.vscode
+.env
+venv/
+logs.log
+cv/*

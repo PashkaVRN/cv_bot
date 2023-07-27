@@ -1,1 +1,1 @@
-# cv_bot
+# cv_bot_pet
