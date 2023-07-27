@@ -9,11 +9,6 @@ load_dotenv()
 TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(TOKEN)
 
-# Настройки логирования.
-logging.basicConfig(filename='logs.log', level=logging.INFO,
-                    format='%(asctime)s %(levelname)s %(message)s',
-                    encoding='utf-8-sig')
-
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -31,7 +26,7 @@ def send_welcome(message):
         'Привет, я бот резюме!🙋‍♂️ \n'
         '\n'
         '🟡 Я создал этого бота чтобы вы могли познакомиться со мной поближе'
-        '👨‍💻)))))\n'
+        '👨‍💻\n'
         '\n'
         '🟢 Бот умеет распознавать текстовые команды и нажатия кнопок, '
         'использование нижнего и верхнего регистра символов поддерживается.\n'
@@ -65,4 +60,11 @@ def send_cv(message):
 
 
 if __name__ == "__main__":
+    """Точка входа. """
+
+    # Настройки логирования.
+    logging.basicConfig(filename='logs.log', level=logging.INFO,
+                        format='%(asctime)s %(levelname)s %(message)s',
+                        encoding='utf-8-sig')
+    # Запуск бота.
     bot.infinity_polling()
