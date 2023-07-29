@@ -65,7 +65,7 @@ async def send_cv(message: types.Message):
 
 @dp.message_handler(text='📡 Контакты')
 async def my_contacts(message: types.Message):
-    """Отправка моих социальных сетей и контактов. """
+    """Отправка моих контактов. """
 
     text = (
         'Telegram предпочитаемый способ связи: @pashkavrn\n'
