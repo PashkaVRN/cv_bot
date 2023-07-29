@@ -44,7 +44,7 @@ async def send_welcome(message: types.Message):
         )
 
 
-@dp.message_handler(text='📄 Мое резюме')
+@dp.message_handler(lambda message: 'мое резюме' in message.text.lower())
 async def send_cv(message: types.Message):
     """Метод отправки резюме. """
 
@@ -63,7 +63,7 @@ async def send_cv(message: types.Message):
     logging.info('Резюме отправлено.')
 
 
-@dp.message_handler(text='📡 Контакты')
+@dp.message_handler(lambda message: 'контакты' in message.text.lower())
 async def my_contacts(message: types.Message):
     """Отправка моих контактов. """
 
