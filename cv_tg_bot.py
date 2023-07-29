@@ -13,7 +13,8 @@ dp = Dispatcher(bot)
 
 # Блок кнопок меню.
 keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-keyboard.add('Мое резюме')
+keyboard.add('📄 Мое резюме')
+keyboard.add('📡 Контакты')
 
 
 @dp.message_handler(commands=['start'])
@@ -43,13 +44,13 @@ async def send_welcome(message: types.Message):
         )
 
 
-@dp.message_handler(text='Мое резюме')
-async def send_document_handler(message: types.Message):
+@dp.message_handler(text='📄 Мое резюме')
+async def send_cv(message: types.Message):
     """Метод отправки резюме. """
 
     logging.info('Отправка резюме.')
     text_caption = (
-        'Мое резюме на данный момент. '
+        'Мое резюме на данный момент.\n'
         'Специальность - Python разработчик, но я так же владею SQL, '
         'немного умею в DevOps и другую всякую всячину 😅, '
         'ну вы прочитаете там 🤭'
@@ -60,6 +61,18 @@ async def send_document_handler(message: types.Message):
         caption=text_caption
     )
     logging.info('Резюме отправлено.')
+
+
+@dp.message_handler(text='📡 Контакты')
+async def my_contacts(message: types.Message):
+    """Отправка моих социальных сетей и контактов. """
+
+    text = (
+        'Telegram предпочитаемый способ связи: @pashkavrn\n'
+        '📧 Моя электронная почта: pavelshevel96@gmail.com\n'
+        '📷 Instagram: @pashka_vrn\n'
+    )
+    await bot.send_message(message.chat.id, text)
 
 
 if __name__ == '__main__':
