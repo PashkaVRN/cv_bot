@@ -1,28 +1,27 @@
 import logging
 import os
 
-import telebot
+from aiogram import Bot, Dispatcher, types, executor
+from aiogram.types import ReplyKeyboardMarkup
 from dotenv import load_dotenv
 
 load_dotenv()
 
-TOKEN = os.getenv('TOKEN')
-bot = telebot.TeleBot(TOKEN)
+# Инициализируйте бота и диспетчера:
+bot = Bot(token=os.getenv('TOKEN'))
+dp = Dispatcher(bot)
+
+# Блок кнопок меню.
+keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+keyboard.add('Мое резюме')
 
 
-@bot.message_handler(commands=['start'])
-def send_welcome(message):
-    """Кнопки внутри бота и приветствие. """
+@dp.message_handler(commands=['start'])
+async def send_welcome(message: types.Message):
+    """Запуск бота и отправка приветствия. """
 
-    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=3)
-    buttons = [
-        telebot.types.KeyboardButton(text='Резюме'),
-
-    ]
-    keyboard.add(*buttons)
-    logging.info('Бот запущен')
-    bot.reply_to(
-        message,
+    logging.info('Отправка приветствия.')
+    await message.reply(
         'Привет, я бот резюме!🙋‍♂️ \n'
         '\n'
         '🟡 Я создал этого бота чтобы вы могли познакомиться со мной поближе'
@@ -40,31 +39,36 @@ def send_welcome(message):
         'Если возникнут вопросы пишите мне в телеграм: @pashkavrn\n'
         'Хорошего времени суток, надеюсь вы получите информацию которую '
         'искали и мы сможем продолжить знакомство дальше 🥳🥳🥳🥳🥳🥳🥳',
-        reply_markup=keyboard)
+        reply_markup=keyboard
+        )
 
 
-@bot.message_handler(func=lambda message: message.text.lower() == 'резюме')
-def send_cv(message):
+@dp.message_handler(text='Мое резюме')
+async def send_document_handler(message: types.Message):
     """Метод отправки резюме. """
 
-    logging.info('Запрос на отправку резюме.')
-    post_text = (
+    logging.info('Отправка резюме.')
+    text_caption = (
         'Мое резюме на данный момент. '
         'Специальность - Python разработчик, но я так же владею SQL, '
         'немного умею в DevOps и другую всякую всячину 😅, '
         'ну вы прочитаете там 🤭'
     )
-    cv = open('cv/Шевель Павел Эдуардович.pdf', 'rb')
-    bot.send_document(message.chat.id, cv, caption=post_text)
+    await bot.send_document(
+        message.chat.id,
+        document=open('cv/Шевель Павел Эдуардович.pdf', 'rb'),
+        caption=text_caption
+    )
     logging.info('Резюме отправлено.')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     """Точка входа. """
 
     # Настройки логирования.
     logging.basicConfig(filename='logs.log', level=logging.INFO,
                         format='%(asctime)s %(levelname)s %(message)s',
                         encoding='utf-8-sig')
+
     # Запуск бота.
-    bot.infinity_polling()
+    executor.start_polling(dp, skip_updates=True)
